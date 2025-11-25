@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="layout" >
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-$END$
+ <div class="p-3" layout:fragment="content1">
+
+     <div class="p-3">
+         <a class="btn btn-primary" th:href="@{/admin/newProduct}" sec:authorize="hasRole('ADMIN')">
+             New Product
+         </a>
+     </div>
+     <table class="table">
+         <thead>
+         <th>
+             ID
+         </th>
+         <th>
+             Name
+         </th>
+         <th>
+             Price
+         </th>
+         <th>
+             Quantité
+         </th>
+         </thead>
+         <tbody>
+         <tr th:each="p:${productList}">
+             <td th:text="${p.id}"></td>
+             <td th:text="${p.name}"></td>
+             <td th:text="${p.price}"></td>
+             <td th:text="${p.quantity}"></td>
+
+             <td sec:authorize="hasRole('ADMIN')">
+
+                 <form th:action="@{/admin/delete(id=${p.id})}" method="post">
+                     <button onclick="return confirm('Etes vous sur de vouloir supprimer cet objet? ')" type="submit" class="btn btn-danger"> Delete</button>
+                 </form>
+
+             </td>
+         </tr>
+         </tbody>
+     </table>
+ </div>
 </body>
 </html>
